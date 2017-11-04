@@ -17,6 +17,7 @@ public class TitleManager : MonoBehaviour {
     GameObject m_start_game_button_obj;
     GameObject m_start_game_button_with_ad_obj;
     Text m_title_text;
+    Text m_best_score_text;
 
     // Use this for initialization
     void Start()
@@ -26,6 +27,9 @@ public class TitleManager : MonoBehaviour {
         m_start_game_button_with_ad_obj = GameObject.Find("StartGameButtonWithAdButton");
         m_start_game_button_with_ad_obj.GetComponent<Button>().onClick.AddListener(OnShowAd);
         m_title_text = GameObject.Find("TitleText").GetComponent<Text>();
+
+        m_best_score_text = GameObject.Find("BestScoreText").GetComponent<Text>();
+        m_best_score_text.text = string.Format("Best Score: {0:F2}", PlayerPrefs.GetFloat("BestScore", 0f));
 
         if (Advertisement.isSupported)
         {

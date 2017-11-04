@@ -45,6 +45,11 @@ public class GameManager : MonoBehaviour
 
     public void OnBallDropped()
     {
+        float best_score = PlayerPrefs.GetFloat("BestScore");
+        if (m_score > best_score)
+        {
+            PlayerPrefs.SetFloat("BestScore", m_score);
+        }
         SceneManager.LoadScene("TitleScene");
     }
 
@@ -74,7 +79,7 @@ public class GameManager : MonoBehaviour
             m_score_text_obj.GetComponent<Text>().color = m_off_score_color;
         }
 
-        m_score_text_obj.GetComponent<Text>().text = "Score: " + string.Format("{0:F2}", m_score);
+        m_score_text_obj.GetComponent<Text>().text = string.Format("Score: {0:F2}", m_score);
     }
 
     private void UpdateObjectsForDebug()
