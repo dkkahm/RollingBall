@@ -15,7 +15,7 @@ public class TitleManager : MonoBehaviour {
     public string placementId = "video";
 
     GameObject m_start_game_button_obj;
-    GameObject m_start_game_button_with_ad_obj;
+    GameObject m_view_ads_button_obj;
     Text m_title_text;
     Text m_best_score_text;
 
@@ -24,12 +24,14 @@ public class TitleManager : MonoBehaviour {
     {
         m_start_game_button_obj = GameObject.Find("StartGameButton");
         m_start_game_button_obj.GetComponent<Button>().onClick.AddListener(OnStartGame);
-        m_start_game_button_with_ad_obj = GameObject.Find("StartGameButtonWithAdButton");
-        m_start_game_button_with_ad_obj.GetComponent<Button>().onClick.AddListener(OnShowAd);
+        m_view_ads_button_obj = GameObject.Find("ViewAds");
+        m_view_ads_button_obj.GetComponent<Button>().onClick.AddListener(OnShowAd);
         m_title_text = GameObject.Find("TitleText").GetComponent<Text>();
 
         m_best_score_text = GameObject.Find("BestScoreText").GetComponent<Text>();
         m_best_score_text.text = string.Format("Best Score: {0:F2}", PlayerPrefs.GetFloat("BestScore", 0f));
+
+        Log("m_best_score_text is " + (m_best_score_text == null ? "null" : "not null"));
 
         if (Advertisement.isSupported)
         {
@@ -40,17 +42,8 @@ public class TitleManager : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        if (Advertisement.IsReady(placementId))
-        {
-            Log("ready");
-            m_start_game_button_obj.SetActive(false);
-            m_start_game_button_with_ad_obj.SetActive(true);
-        }
-        else
-        {
-            m_start_game_button_obj.SetActive(true);
-            m_start_game_button_with_ad_obj.SetActive(false);
-        }
+        m_view_ads_button_obj.GetComponent<Button>().interactable = Advertisement.IsReady(placementId);
+        // m_view_ads_button_obj.SetActive(Advertisement.IsReady(placementId));
 
         if (Application.platform == RuntimePlatform.Android)
         {
@@ -76,7 +69,7 @@ public class TitleManager : MonoBehaviour {
 
     void HandleShowAdResult(ShowResult result)
     {
-        OnStartGame();
+        // OnStartGame();
     }
 
     private void Log(string text)
